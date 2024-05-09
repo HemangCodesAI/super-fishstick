@@ -1,7 +1,4 @@
 __pycache__
 .env
 venv
-.chainlit
-.files
-
-
+try.ipynb

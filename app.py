@@ -1,29 +1,12 @@
-import chainlit as cl
-# import openai
-import os
+import streamlit as st
 import google.generativeai as genai
-# from langchain import PromptTemplate, LLMChain
-# from langchain_google_genai import ChatGoogleGenerativeAI
-# from langchain_core.messages import HumanMessage
-import PIL.Image
+import google.ai.generativelanguage as glm
+from PIL import Image
 from dotenv import load_dotenv
+import os
 load_dotenv()
-
-def remove_subfolders(folder_path):
-    # Iterate over all items in the directory
-    for item in os.listdir(folder_path):
-        item_path = os.path.join(folder_path, item)
-        print(item_path)
-        print("1")
-        # Check if the item is a directory
-        if os.path.isdir(item_path):
-            # Recursively remove subfolders
-            remove_subfolders(item_path)
-            # Remove the empty directory
-            os.rmdir(item_path)
-        elif os.path.isfile(item_path):
-            os.remove(item_path)
-
+API_KEY = os.getenv("google_ai_key")
+genai.configure(api_key=API_KEY)
 input ='''You have perfect vision and pay great attention to detail which makes you an expert at building single page apps using Tailwind, HTML and JS.
     You take screenshots of a reference web page from the user, and then build single page apps 
     using Tailwind, HTML and JS.
@@ -48,70 +31,23 @@ input ='''You have perfect vision and pay great attention to detail which makes 
     Return only the full code in <html></html> tags.
     '''
 
-def process_image():
-    try:
-        folder_path=os.path.join(".files",os.listdir('.files\\')[0])
-        for file in os.listdir(folder_path):
-            print(file)
-            img_path=os.path.join(folder_path,file)
-
-    except:
-        print("no image")
-    # img=[]
-    return img_path
-
-# def get_code(img,llm,input=input):
-    # res=llm.generate_content([input,img],stream=True,generation_config={"max_output_tokens":4096})
-    # return res.content
-
-# async_get_code=cl.make_async(get)
-# @cl.on_chat_start
-# def main():
-#     load_dotenv()
-#     genai.configure(api_key=os.getenv("google_ai_key"))
-#     llm=genai.GenerativeModel('gemini-pro-vision')
-#     cl.user_session.set("llm",llm)
-
-@cl.on_chat_start
-async def start():
+def stream_code(llm,image,input=input):
+    res=llm.generate_content([input,image],stream=True,generation_config={"max_output_tokens":4096})
+    for chunk in res:
+        yield chunk.candidates[0].content.parts[0].text
     
-    load_dotenv()
-    genai.configure(api_key=os.getenv("google_ai_key"))
-    llm=genai.GenerativeModel('gemini-pro-vision')
-    cl.user_session.set("llm",llm)
-    files = None
 
-    # Wait for the user to upload a file
-    while files == None:
-        files = await cl.AskFileMessage(
-            content="Please upload a text file to begin!", accept=[""]
-        ).send()
-
-    # img_file = files[0]
-    img=PIL.Image.open(process_image())
-
-    # with open(text_file.path, "r", encoding="utf-8") as f:
-    #     text = f.read()
-
-    # Let the user know that the system is ready
-    await cl.Message(
-        content=f"`phot"
-    ).send()
-
-
-@cl.on_message
-async def main(message : cl.Message):
-    llm=cl.user_session.get("llm")
-    img=PIL.Image.open(process_image())
-    print("started")
-    res=llm.generate_content([input,img],stream=True,generation_config={"max_output_tokens":4096})
-    # res="abra ca dabra"
-    # # for chunk in res:
-    # #     await cl.Message(content=chunk.candidates[0].content.parts[0].text).send()
-    cl.Message(content=res.content).send()
-    # await cl.Message(content=res).send()
-
-@cl.on_chat_end
-def end():
-    print("goodbye", cl.user_session.get("id"))
-    remove_subfolders(".files\\")
+st.set_page_config( page_icon="📸", layout="centered", initial_sidebar_state="collapsed")
+st.header("Google AI Studio + Gemini Pro")
+uploaded_file = st.file_uploader("Choose an Image file", accept_multiple_files=False, type=["jpg", "png"])
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image", use_column_width=True)
+    bytes_data = uploaded_file.getvalue()
+    generate = st.button("Generate!")
+    if generate:
+        llm=genai.GenerativeModel('gemini-pro-vision')
+        print("started")
+        # res=llm.generate_content([input,image],stream=True,generation_config={"max_output_tokens":4096})
+        st.write_stream(stream_code(llm,image))
+        # st.write(res.text)
