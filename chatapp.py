@@ -9,7 +9,7 @@ API_KEY = os.getenv("google_ai_key")
 genai.configure(api_key=API_KEY)
 
 llm=genai.GenerativeModel('gemini-pro',)
-chat = llm.start_chat(history=[])
+# chat = llm.start_chat(history=[])
 input ='''You have perfect vision and pay great attention to detail which makes you an expert at building single page apps using Tailwind, HTML and JS.
     You take screenshots of a reference web page from the user, and then build single page apps 
     using Tailwind, HTML and JS.
@@ -51,8 +51,10 @@ def get_gemini_response(question):
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = []
+# if 'chat_history' not in st.session_state and st.session_state.get("first_phase_complete"):
+#     chat = llm.start_chat(history=[])
+#     res=chat.send_message(chat_command)
+#     st.session_state['chat_history'] = []
 
 def recusrsive_parser(image):
     vllm=genai.GenerativeModel('gemini-pro-vision')
@@ -76,12 +78,28 @@ with col1:
         if generate:
             recusrsive_parser(image)
             st.session_state["first_phase_complete"]=True
-        if st.session_state.get("first_phase_complete"):
+        else:
+            if st.session_state.get("first_phase_complete")!=None:
+                st.markdown(st.session_state.get("generated_code"))
 
-            st.write(st.session_state.get("generated_code"))
+
+chat_command=f'''Yor are a expert web developer and the I have asked you to make me a website as per my design, you have made the webite using Tailwind, HTML and JS
+. you have done an excelent job .
+here is the code that you gave {st.session_state.get("generated_code")}. 
+Now i want you to do some minor updates in this code and help me imporve the code. you will only update the code without adding any comments , you will tell me exactly where in the code i will need to paste the changes.no need to give the final complete updated code.
+dont suggest future updates unless asked explicitly.
+let me know you are ready for the task by just saying lets go , than i will tell you what updates i want'''
+if 'chat_history' not in st.session_state and st.session_state.get("first_phase_complete"):
+    chat = llm.start_chat(history=[])
+    res=chat.send_message(chat_command)
+    st.session_state['chat_history'] = chat.history
+chat=llm.start_chat(history=st.session_state.get("chat_history"))
+
+
 with col2:
     if st.session_state.get("first_phase_complete"):
         st.write("cahtbot mode")
+        # chat.history
         if prompt := st.chat_input("What is up?"):
             st.session_state.messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"):
@@ -89,6 +107,7 @@ with col2:
             with st.chat_message("assistant"):
                 response=st.write_stream(get_gemini_response(prompt))
             st.session_state.messages.append({"role": "assistant", "content": response})
+            st.session_state['chat_history']=chat.history
         for message in st.session_state.messages[:-1:-1]:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
