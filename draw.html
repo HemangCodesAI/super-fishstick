@@ -1,38 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MRINAL</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Untitled</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
   </style>
 </head>
-<body>
-  <div class="bg-slate-900 text-white flex flex-col items-center justify-center min-h-screen">
-    <div class="text-4xl font-bold">MRINAL</div>
-    <div class="flex items-center mt-4">
-      <input type="text" class="bg-slate-800 text-white rounded-lg px-4 py-2 w-full focus:outline-none" placeholder="Search">
-      <button class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 ml-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </button>
+<body class="bg-slate-100">
+  <div class="flex h-screen w-screen flex-col items-center justify-center">
+    <h1 class="text-3xl font-bold text-slate-800">Shopping</h1>
+    <div class="mt-10 flex flex-row">
+      <div class="mr-5">
+        <button class="bg-white border border-slate-300 shadow-sm rounded-md py-2 px-4 text-sm font-medium text-slate-700 hover:bg-slate-50">Male</button>
+      </div>
+      <div class="mr-5">
+        <button class="bg-white border border-slate-300 shadow-sm rounded-md py-2 px-4 text-sm font-medium text-slate-700 hover:bg-slate-50">Female</button>
+      </div>
+      <div>
+        <button class="bg-white border border-slate-300 shadow-sm rounded-md py-2 px-4 text-sm font-medium text-slate-700 hover:bg-slate-50">Animal</button>
+      </div>
     </div>
-    <div class="flex justify-center mt-8">
-      <a href="https://www.google.com" target="_blank" class="bg-white text-black rounded-lg px-4 py-2 mx-2 hover:bg-gray-100">Google</a>
-      <a href="https://www.youtube.com" target="_blank" class="bg-red-600 text-white rounded-lg px-4 py-2 mx-2 hover:bg-red-700">Youtube</a>
-      <a href="https://www.github.com" target="_blank" class="bg-black text-white rounded-lg px-4 py-2 mx-2 hover:bg-gray-800">Github</a>
-    </div>
-    <div class="mt-16 text-center">
-      <p>This is a prototype of a website</p>
+    <div class="mt-10 flex flex-col items-center">
+      <div class="w-96 h-96 bg-white rounded-md shadow-lg flex flex-col items-center justify-center">
+        <img src="https://placehold.co/300x300" alt="A picture of a person.">
+        <h2 class="mt-2 text-xl font-semibold text-slate-800">Shreyas CHomu</h2>
+      </div>
     </div>
   </div>
 </body>

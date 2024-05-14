@@ -8,11 +8,8 @@ load_dotenv()
 API_KEY = os.getenv("google_ai_key")
 genai.configure(api_key=API_KEY)
 
-
-llm=genai.GenerativeModel('gemini-pro')
+llm=genai.GenerativeModel('gemini-pro',)
 chat = llm.start_chat(history=[])
-
-
 input ='''You have perfect vision and pay great attention to detail which makes you an expert at building single page apps using Tailwind, HTML and JS.
     You take screenshots of a reference web page from the user, and then build single page apps 
     using Tailwind, HTML and JS.
@@ -37,12 +34,13 @@ input ='''You have perfect vision and pay great attention to detail which makes 
     Return only the full code in <html></html> tags.
     '''
 st.set_page_config( page_icon="📸", layout="wide", initial_sidebar_state="collapsed")
+
 st.title("hu lu lu lu")
 col1, col2 = st.columns(2)
-
 def stream_code(llm,image,input=input):
     res=llm.generate_content([input,image],stream=True,generation_config={"max_output_tokens":4096})
     for chunk in res:
+        # generated_code=generated_code+chunk.candidates[0].content.parts[0].text
         yield chunk.candidates[0].content.parts[0].text
 
 def get_gemini_response(question):   
@@ -56,33 +54,43 @@ if "messages" not in st.session_state:
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 
-
-
+def recusrsive_parser(image):
+    vllm=genai.GenerativeModel('gemini-pro-vision')
+    print("started")
+    try:
+        st.session_state["generated_code"]=st.write_stream(stream_code(vllm,image))
+        st.session_state["first_phase_complete"]=True 
+    except:
+        st.write("Network Error!!!")
+        regenerate=st.button("Regenerate")
+        if regenerate:
+            print("restarting")
+            recusrsive_parser(image)
+# with tab1:
 with col1:
     uploaded_file = st.file_uploader("Choose an Image file", accept_multiple_files=False, type=["jpg", "png"])
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
         st.image(image, caption="Uploaded Image", use_column_width=True)
-        bytes_data = uploaded_file.getvalue()
         generate = st.button("Generate!")
         if generate:
-            vllm=genai.GenerativeModel('gemini-pro-vision')
-            print("started")
-            try:
-                st.write_stream(stream_code(vllm,image))
-            except:
-                st.write("net sudahro")
-                
+            recusrsive_parser(image)
+            st.session_state["first_phase_complete"]=True
+        if st.session_state.get("first_phase_complete"):
+
+            st.write(st.session_state.get("generated_code"))
 with col2:
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    if prompt := st.chat_input("What is up?"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("assistant"):
-            response=st.write_stream(get_gemini_response(prompt))
-        st.session_state.messages.append({"role": "assistant", "content": response})
+    if st.session_state.get("first_phase_complete"):
+        st.write("cahtbot mode")
+        if prompt := st.chat_input("What is up?"):
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.markdown(prompt)
+            with st.chat_message("assistant"):
+                response=st.write_stream(get_gemini_response(prompt))
+            st.session_state.messages.append({"role": "assistant", "content": response})
+        for message in st.session_state.messages[:-1:-1]:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+    else :
+        st.write("not chatbot mode")
