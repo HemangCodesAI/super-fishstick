@@ -2,7 +2,10 @@
 
 A simple tool to convert screenshots, sketches, and Figma designs into clean, functional code using AI. 
 
-https://github.com/abi/screenshot-to-code/assets/23818/6cebadae-2fe3-4986-ac6a-8fb9db030045
+
+
+https://github.com/HemangCodesAI/super-fishstick/assets/91689621/d1abe6d9-2315-414f-9449-548f274eb2a2
+
 
 Supported AI models:
 
@@ -32,16 +35,15 @@ The app will be up and running at localhost. Note that you can develop the appli
 
 ## 📚 Examples
 
-**NYTimes**
+**IMDB Page**
 
 | Original                                                                                                                                                        | Replica                                                                                                                                                         |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="1238" alt="Screenshot 2023-11-20 at 12 54 03 PM" src="https://github.com/abi/screenshot-to-code/assets/23818/3b644dfa-9ca6-4148-84a7-3405b6671922"> | <img width="1414" alt="Screenshot 2023-11-20 at 12 59 56 PM" src="https://github.com/abi/screenshot-to-code/assets/23818/26201c9f-1a28-4f35-a3b1-1f04e2b8ce2a"> |
+| <img width="1238" alt="Screenshot 2023-11-20 at 12 54 03 PM" src="https://github.com/HemangCodesAI/super-fishstick/blob/main/examples/image.png"> | <img width="1414" alt="Screenshot 2023-11-20 at 12 59 56 PM" src="https://github.com/HemangCodesAI/super-fishstick/blob/main/examples/imdbexample.jpg"> |
 
-**Instagram page (with not Taylor Swift pics)**
+**Portfolio Page**
 
-https://github.com/abi/screenshot-to-code/assets/23818/503eb86a-356e-4dfc-926a-dabdb1ac7ba1
+| Original                                                                                                                                                        | Replica                                                                                                                                                         |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img width="1238" alt="Screenshot 2023-11-20 at 12 54 03 PM" src="https://github.com/HemangCodesAI/super-fishstick/blob/main/examples/sample.jpg"> | <img width="1414" alt="Screenshot 2023-11-20 at 12 59 56 PM" src="https://github.com/HemangCodesAI/super-fishstick/blob/main/examples/sample%20example.jpg"> |
 
-**Hacker News** but it gets the colors wrong at first so we nudge it
-
-https://github.com/abi/screenshot-to-code/assets/23818/3fec0f77-44e8-4fb3-a769-ac7410315e5d
