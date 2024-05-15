@@ -5,7 +5,7 @@ import os
 from PIL import Image
 
 load_dotenv()
-API_KEY = os.getenv("google_ai_key")
+API_KEY = os.getenv("Google_API_Key")
 genai.configure(api_key=API_KEY)
 
 llm=genai.GenerativeModel('gemini-pro',)
@@ -51,11 +51,6 @@ def get_gemini_response(question):
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# if 'chat_history' not in st.session_state and st.session_state.get("first_phase_complete"):
-#     chat = llm.start_chat(history=[])
-#     res=chat.send_message(chat_command)
-#     st.session_state['chat_history'] = []
-
 def recusrsive_parser(image):
     vllm=genai.GenerativeModel('gemini-pro-vision')
     print("started")
@@ -98,7 +93,7 @@ chat=llm.start_chat(history=st.session_state.get("chat_history"))
 
 with col2:
     if st.session_state.get("first_phase_complete"):
-        st.write("cahtbot mode")
+        # st.write("cahtbot mode")
         # chat.history
         if prompt := st.chat_input("What is up?"):
             st.session_state.messages.append({"role": "user", "content": prompt})
@@ -112,4 +107,6 @@ with col2:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
     else :
-        st.write("not chatbot mode")
+        st.image('examples/bot.jpg')
+        "## Upload you design or screenshot to begin code generation."
+        
