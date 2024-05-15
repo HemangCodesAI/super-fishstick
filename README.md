@@ -1,4 +1,4 @@
-# screenshot-to-code
+# Vision2Code
 
 A simple tool to convert screenshots, sketches, and Figma designs into clean, functional code using AI. 
 
