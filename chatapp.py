@@ -35,7 +35,7 @@ input ='''You have perfect vision and pay great attention to detail which makes 
     '''
 st.set_page_config( page_icon="📸", layout="wide", initial_sidebar_state="collapsed")
 
-st.title("hu lu lu lu")
+st.title("Vision2Code")
 col1, col2 = st.columns(2)
 def stream_code(llm,image,input=input):
     res=llm.generate_content([input,image],stream=True,generation_config={"max_output_tokens":4096})
